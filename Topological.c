@@ -1,81 +1,49 @@
 #include<stdio.h>
-
-int cost[10][10],n,colsum[10];
-
-void cal_colsum()
-
+#include<stdlib.h>
+int indegree[10],cost[10][10],n;
+void cal()
 {
-
-for(int j=0;j<n;j++)
-
-{
-
-colsum[j]=0;
-
-for(int i=0;i<n;i++)
-
-colsum[j]+=cost[i][j];
-
+	int i,j;
+	for(i=0;i<n;i++)
+	{
+		indegree[i]=0;
+		for(j=0;j<n;j++)
+		 indegree[i]+=cost[j][i];
+	}
 }
-
-}
-
-void source_removal()
-
+void sremoval()
 {
-
-int i,j,k,select[10]={0};
-
-printf("Topological ordering is:");
-
-for(i=0;i<n;i++)
-
-{
-
-//Calculate the outdegree for each vertices
-
-cal_colsum();
-
-for(j=0;j<n;j++)
-
-{
-
-if(select[j]==0 && colsum[j]==0)//source vertex
-
-break;
-
+	int removal[10]={0};
+	int i,k,count;
+	printf("sprting order\n");
+	for(count=0;count<n;count++)
+	{
+		cal();
+		for(i=0;i<n;i++)
+		{
+			if(removal[i]==0 && indegree[i]==0)
+			break;
+		}
+		if(i==n)
+		{
+			printf("graph is cyclic no sol\n");
+			return;
+		}
+		printf("%d\t",i);
+		removal[i]=1;
+		for(k=0;k<n;k++)
+		 cost[i][k]=0;
+	}
+	printf("above is the correct sol\n");
 }
-
-printf("%d ",j);
-
-select[j]=1;
-
-//Remove source vertex j from cost matrix
-
-for(k=0;k<n;k++)
-
-cost[j][k]=0;
-
-}
-
-}
-
-void main() 
-
+int main()
 {
-
- printf("Enter no. of Vertices: ");
-
- scanf("%d",&n);
-
- printf("Enter the cost matrix\n");
-
- for(int i=0;i<n;i++)
-
- for(int j=0;j<n;j++)
-
- scanf("%d",&cost[i][j]);
-
- source_removal();
-
+	int i,j;
+	printf("enter no. of verticces\n");
+	scanf("%d",&n);
+	printf("enter matrix\n");
+	for(i=0;i<n;i++)
+	 for(j=0;j<n;j++)
+	  scanf("%d",&cost[i][j]);
+	sremoval();  
 }
